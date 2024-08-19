@@ -1,15 +1,37 @@
+function Autobind( 
+     _: any,
+     _2: string, 
+     descriptor: PropertyDescriptor)
+    {
+     const originalMethod = descriptor.value
+
+     const myDescriptor:PropertyDescriptor={
+        configurable:true,
+        get(){
+           const boundFn = originalMethod.bind(this)
+           return boundFn;
+        }
+     }
+     return myDescriptor
+}
+
+
+
+
+
+
 class ProjectInput {
     templateElement: HTMLTemplateElement;
 
     hotsElement: HTMLDivElement;
 
-    element:HTMLFormElement;
+    element: HTMLFormElement;
 
-    titleInputElement:HTMLInputElement;
+    titleInputElement: HTMLInputElement;
 
-    descriptionInputElement:HTMLTextAreaElement;
+    descriptionInputElement: HTMLTextAreaElement;
 
-    peopleInputElement:HTMLInputElement;
+    peopleInputElement: HTMLInputElement;
 
     constructor() {
         this.templateElement = document.getElementById("project-input")! as HTMLTemplateElement;
@@ -27,21 +49,23 @@ class ProjectInput {
         this.descriptionInputElement = this.element.querySelector("#description") as HTMLTextAreaElement
 
         this.peopleInputElement = this.element.querySelector("#people") as HTMLInputElement
-        
+
         this.configure()
 
         this.attach();
     }
+    
 
-    private submitHandler(event:Event){
+    @Autobind
+    private submitHandler(event: Event) {
         event.preventDefault()
         console.log(this.titleInputElement.value);
-        
+
     }
 
 
-    private configure(){
-        this.element.addEventListener("submit" , this.submitHandler.bind(this))
+    private configure() {
+        this.element.addEventListener("submit", this.submitHandler)
     }
 
     private attach() {
