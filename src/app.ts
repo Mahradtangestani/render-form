@@ -1,21 +1,54 @@
-function Autobind( 
-     _: any,
-     _2: string, 
-     descriptor: PropertyDescriptor)
-    {
-     const originalMethod = descriptor.value
+interface Validatable {
+    value: string | number
+    required?: boolean
+    minLength?: number
+    maxLength?: number
+    min?: number
+    max?: number
+}
 
-     const myDescriptor:PropertyDescriptor={
-        configurable:true,
-        get(){
-           const boundFn = originalMethod.bind(this)
-           return boundFn;
-        }
-     }
-     return myDescriptor
+function validate(validatableInput: Validatable) {
+    let isValid = true
+
+    if (validatableInput.required) {
+        isValid = isValid && validatableInput.value.toString().trim().length !== 0
+    }
+    if (validatableInput.minLength != null && typeof validatableInput.value === "string") {
+        isValid = isValid && validatableInput.value.length >= validatableInput.minLength
+    }
+    if (validatableInput.maxLength != null && typeof validatableInput.value === 'string') {
+        isValid = isValid && validatableInput.value.length <= validatableInput.maxLength
+    }
+    if (validatableInput.min != null && typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value >= validatableInput.min
+    }
+    if (validatableInput.max != null && typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value <= validatableInput.max
+    }
+
+    return isValid;
 }
 
 
+
+
+
+
+function Autobind(
+    _: any,
+    _2: string,
+    descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value
+
+    const myDescriptor: PropertyDescriptor = {
+        configurable: true,
+        get() {
+            const boundFn = originalMethod.bind(this)
+            return boundFn;
+        }
+    }
+    return myDescriptor
+}
 
 
 
@@ -54,29 +87,42 @@ class ProjectInput {
 
         this.attach();
     }
-    
 
-    private clearInputs(){
+
+    private clearInputs() {
         this.titleInputElement.value = ""
         this.descriptionInputElement.value = ""
         this.peopleInputElement.value = ""
     }
 
 
-    private getUserInput():[string , string , number] | void{
+    private getUserInput(): [string, string, number] | void {
         const enteredTitle = this.titleInputElement.value
         const enteredDescription = this.descriptionInputElement.value
         const enteredPeople = this.peopleInputElement.value
 
-        if( 
-            enteredTitle.trim().length === 0 || 
-            enteredDescription.trim().length === 0 || 
-            enteredPeople.trim().length === 0){
+        const titleValidatable: Validatable = {
+            value: enteredTitle,
+            required: true,
+            minLength: 3
+        }
+        const descriptionValidatable: Validatable = {
+            value: enteredDescription,
+            required: true,
+            minLength: 5, maxLength: 200
+        }
+        const peopleValidatable: Validatable = {
+            value: +enteredPeople,
+            required: true,
+            min: 1, max: 10
 
+        }
+
+        if (!validate(titleValidatable) || !validate(descriptionValidatable) || !validate(peopleValidatable)) {
             alert("Invalid Input , Please try again!")
             return;
-        }else{
-           return [enteredTitle , enteredDescription , +enteredPeople]
+        } else {
+            return [enteredTitle, enteredDescription, +enteredPeople]
         }
     }
 
@@ -85,11 +131,11 @@ class ProjectInput {
         event.preventDefault()
         const userInput = this.getUserInput()
 
-        if(Array.isArray(userInput)){
-            const [title , desc , people] = userInput;
-            console.log(title , desc , people);
+        if (Array.isArray(userInput)) {
+            const [title, desc, people] = userInput;
+            console.log(title, desc, people);
             this.clearInputs();
-            
+
         }
         console.log(this.titleInputElement.value);
 
