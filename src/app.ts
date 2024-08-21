@@ -52,6 +52,40 @@ function Autobind(
 
 
 
+class ProjectList {
+    templateElement: HTMLTemplateElement;
+
+    hotsElement: HTMLDivElement;
+
+    element: HTMLFormElement;
+
+
+    constructor(private type: "Active" | "Finished") {
+        this.templateElement = document.getElementById("project-list")! as HTMLTemplateElement;
+        this.hotsElement = document.getElementById("app")! as HTMLDivElement;
+
+        const importedNode = document.importNode(this.templateElement.content, true)
+
+        console.log(importedNode);
+
+        this.element = importedNode.firstElementChild as HTMLFormElement
+        this.element.id = `${this.type}-project`;
+
+        this.attach();
+        this.renderContent();
+    }
+    
+    private attach(){
+        this.hotsElement.insertAdjacentElement("beforeend" , this.element)
+    }
+
+    private renderContent(){
+        const listId = `${this.type}-prject-list`
+        this.element.querySelector("ul")!.id = listId
+        this.element.querySelector("h2")!.textContent = this.type.toUpperCase() + " PROJECTS"
+    }
+}
+
 
 class ProjectInput {
     templateElement: HTMLTemplateElement;
@@ -152,3 +186,6 @@ class ProjectInput {
 }
 
 const prjInput = new ProjectInput
+
+const activePrj = new ProjectList("Active")
+const finishedPrj = new ProjectList("Finished")
