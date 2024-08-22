@@ -48,7 +48,7 @@ button:active {
   border: 1px solid #ff0062;
 }
 .projects header {
-  background: #929edc;
+  background: rgb(249, 53, 53);
   height: 3.5rem;
   display: flex;
   justify-content: center;

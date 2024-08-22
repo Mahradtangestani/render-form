@@ -1,3 +1,19 @@
+class projectState{
+    private projects : any[] = []
+
+    addProject(title:string , description:string , numOfPeople:number){
+        const newProject={
+            id: Math.random().toString(),
+            title:title,
+            description:description,
+            people:numOfPeople
+        }
+        this.projects.push(newProject)
+    }
+}
+
+
+
 interface Validatable {
     value: string | number
     required?: boolean
@@ -32,8 +48,6 @@ function validate(validatableInput: Validatable) {
 
 
 
-
-
 function Autobind(
     _: any,
     _2: string,
@@ -60,7 +74,7 @@ class ProjectList {
     element: HTMLFormElement;
 
 
-    constructor(private type: "Active" | "Finished") {
+    constructor(private type: "active" | "finished") {
         this.templateElement = document.getElementById("project-list")! as HTMLTemplateElement;
         this.hotsElement = document.getElementById("app")! as HTMLDivElement;
 
@@ -69,7 +83,7 @@ class ProjectList {
         console.log(importedNode);
 
         this.element = importedNode.firstElementChild as HTMLFormElement
-        this.element.id = `${this.type}-project`;
+        this.element.id = `${this.type}-projects`;
 
         this.attach();
         this.renderContent();
@@ -187,5 +201,5 @@ class ProjectInput {
 
 const prjInput = new ProjectInput
 
-const activePrj = new ProjectList("Active")
-const finishedPrj = new ProjectList("Finished")
+const activePrj = new ProjectList("active")
+const finishedPrj = new ProjectList("finished")
