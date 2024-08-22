@@ -1,16 +1,30 @@
-class projectState{
-    private projects : any[] = []
+class ProjectState {
+    private projects: any[] = []
 
-    addProject(title:string , description:string , numOfPeople:number){
-        const newProject={
+    private static instance: ProjectState
+
+    private constructor(){}
+
+    static getInstace(){
+        if(this.instance){
+            return this.instance
+        }
+        this.instance = new ProjectState();
+        return this.instance;
+    }
+
+    addProject(title: string, description: string, numOfPeople: number) {
+        const newProject = {
             id: Math.random().toString(),
-            title:title,
-            description:description,
-            people:numOfPeople
+            title: title,
+            description: description,
+            people: numOfPeople
         }
         this.projects.push(newProject)
     }
 }
+
+const projectState = ProjectState.getInstace()
 
 
 
@@ -88,12 +102,12 @@ class ProjectList {
         this.attach();
         this.renderContent();
     }
-    
-    private attach(){
-        this.hotsElement.insertAdjacentElement("beforeend" , this.element)
+
+    private attach() {
+        this.hotsElement.insertAdjacentElement("beforeend", this.element)
     }
 
-    private renderContent(){
+    private renderContent() {
         const listId = `${this.type}-prject-list`
         this.element.querySelector("ul")!.id = listId
         this.element.querySelector("h2")!.textContent = this.type.toUpperCase() + " PROJECTS"
@@ -181,7 +195,7 @@ class ProjectInput {
 
         if (Array.isArray(userInput)) {
             const [title, desc, people] = userInput;
-            console.log(title, desc, people);
+            projectState.addProject(title , desc , people)
             this.clearInputs();
 
         }
