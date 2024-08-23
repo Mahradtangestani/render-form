@@ -1,16 +1,23 @@
 class ProjectState {
+
+    private listeners: any[] = []
+
     private projects: any[] = []
 
     private static instance: ProjectState
 
-    private constructor(){}
+    private constructor() { }
 
-    static getInstace(){
-        if(this.instance){
+    static getInstace() {
+        if (this.instance) {
             return this.instance
         }
         this.instance = new ProjectState();
         return this.instance;
+    }
+
+    addListener(listenerFn: Function) {
+        this.listeners.push(listenerFn)
     }
 
     addProject(title: string, description: string, numOfPeople: number) {
@@ -21,6 +28,9 @@ class ProjectState {
             people: numOfPeople
         }
         this.projects.push(newProject)
+        for (const listenerFn of this.listeners) {
+            listenerFn(this.projects.slice())
+        }
     }
 }
 
@@ -87,6 +97,8 @@ class ProjectList {
 
     element: HTMLFormElement;
 
+    assignedProject: any[]
+
 
     constructor(private type: "active" | "finished") {
         this.templateElement = document.getElementById("project-list")! as HTMLTemplateElement;
@@ -98,6 +110,10 @@ class ProjectList {
 
         this.element = importedNode.firstElementChild as HTMLFormElement
         this.element.id = `${this.type}-projects`;
+
+        projectState.addListener((projects: any[]) => {
+           this.assignedProject = projects
+        })
 
         this.attach();
         this.renderContent();
@@ -195,7 +211,7 @@ class ProjectInput {
 
         if (Array.isArray(userInput)) {
             const [title, desc, people] = userInput;
-            projectState.addProject(title , desc , people)
+            projectState.addProject(title, desc, people)
             this.clearInputs();
 
         }
