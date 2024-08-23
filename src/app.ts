@@ -106,17 +106,28 @@ class ProjectList {
 
         const importedNode = document.importNode(this.templateElement.content, true)
 
-        console.log(importedNode);
-
+        this.assignedProject = []
+        
         this.element = importedNode.firstElementChild as HTMLFormElement
         this.element.id = `${this.type}-projects`;
 
         projectState.addListener((projects: any[]) => {
            this.assignedProject = projects
+           this.renderProjects();
         })
 
         this.attach();
         this.renderContent();
+    }
+
+    private renderProjects(){
+        const listEl = document.getElementById(`${this.type}-prject-list`)! as HTMLUListElement;
+        for (const prjItem of this.assignedProject) {
+            const listItem = document.createElement("li");
+            listItem.textContent = prjItem.title
+
+            listEl.appendChild(listItem)
+        }
     }
 
     private attach() {
