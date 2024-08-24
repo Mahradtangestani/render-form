@@ -1,3 +1,17 @@
+class Project {
+    constructor(
+
+       public id: string,
+       public title: string,
+       public description: string,
+       public people: number,
+
+    ) {
+
+    }
+}
+
+
 class ProjectState {
 
     private listeners: any[] = []
@@ -107,20 +121,20 @@ class ProjectList {
         const importedNode = document.importNode(this.templateElement.content, true)
 
         this.assignedProject = []
-        
+
         this.element = importedNode.firstElementChild as HTMLFormElement
         this.element.id = `${this.type}-projects`;
 
         projectState.addListener((projects: any[]) => {
-           this.assignedProject = projects
-           this.renderProjects();
+            this.assignedProject = projects
+            this.renderProjects();
         })
 
         this.attach();
         this.renderContent();
     }
 
-    private renderProjects(){
+    private renderProjects() {
         const listEl = document.getElementById(`${this.type}-prject-list`)! as HTMLUListElement;
         for (const prjItem of this.assignedProject) {
             const listItem = document.createElement("li");
