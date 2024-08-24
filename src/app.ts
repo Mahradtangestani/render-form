@@ -111,27 +111,46 @@ function Autobind(
 }
 
 
-
-class ProjectList {
+abstract class Component<T extends HTMLElement, U extends HTMLElement>{
     templateElement: HTMLTemplateElement;
 
-    hotsElement: HTMLDivElement;
+    hotsElement: T;
 
-    element: HTMLFormElement;
+    element: U;
 
+    constructor(templateId:string, hostElementId:string, insertAtStart:boolean , newElementId?:string){
+        this.templateElement = document.getElementById(templateId)! as HTMLTemplateElement;
+        this.hotsElement = document.getElementById(hostElementId)! as T;
+
+        const importedNode = document.importNode(this.templateElement.content, true)
+
+        console.log(importedNode);
+
+        this.element = importedNode.firstElementChild as U
+        if(newElementId){
+            this.element.id = newElementId
+        }
+        this.attach(insertAtStart)
+    }
+
+    private attach(insertAtBegin:boolean) {
+        this.hotsElement.insertAdjacentElement(insertAtBegin ? "afterbegin" : "beforeend", this.element)
+    }
+
+    abstract configure() : void
+    abstract renderContent() : void
+}
+
+
+class ProjectList extends Component<HTMLDivElement , HTMLUListElement> {
+    
     assignedProject: Project[]
 
 
     constructor(private type: "active" | "finished") {
-        this.templateElement = document.getElementById("project-list")! as HTMLTemplateElement;
-        this.hotsElement = document.getElementById("app")! as HTMLDivElement;
-
-        const importedNode = document.importNode(this.templateElement.content, true)
-
+        super("project-list", "app", false , `${type}-projects`)
+        
         this.assignedProject = []
-
-        this.element = importedNode.firstElementChild as HTMLFormElement
-        this.element.id = `${this.type}-projects`;
 
         projectState.addListener((projects: Project[]) => {
             const relatedProject = projects.filter(prj => {
@@ -146,7 +165,6 @@ class ProjectList {
             this.renderProjects();
         })
 
-        this.attach();
         this.renderContent();
     }
 
@@ -160,12 +178,11 @@ class ProjectList {
             listEl.appendChild(listItem)
         }
     }
-
-    private attach() {
-        this.hotsElement.insertAdjacentElement("beforeend", this.element)
+    configure(): void {
+        
     }
 
-    private renderContent() {
+    renderContent() {
         const listId = `${this.type}-prject-list`
         this.element.querySelector("ul")!.id = listId
         this.element.querySelector("h2")!.textContent = this.type.toUpperCase() + " PROJECTS"
@@ -173,13 +190,8 @@ class ProjectList {
 }
 
 
-class ProjectInput {
-    templateElement: HTMLTemplateElement;
-
-    hotsElement: HTMLDivElement;
-
-    element: HTMLFormElement;
-
+class ProjectInput extends Component<HTMLDivElement , HTMLFormElement> {
+    
     titleInputElement: HTMLInputElement;
 
     descriptionInputElement: HTMLTextAreaElement;
@@ -187,15 +199,7 @@ class ProjectInput {
     peopleInputElement: HTMLInputElement;
 
     constructor() {
-        this.templateElement = document.getElementById("project-input")! as HTMLTemplateElement;
-        this.hotsElement = document.getElementById("app")! as HTMLDivElement;
-
-        const importedNode = document.importNode(this.templateElement.content, true)
-
-        console.log(importedNode);
-
-        this.element = importedNode.firstElementChild as HTMLFormElement
-        this.element.id = "user-input"
+        super("project-input" , "app" , true , "user-input")
 
         this.titleInputElement = this.element.querySelector("#title") as HTMLInputElement
 
@@ -205,7 +209,15 @@ class ProjectInput {
 
         this.configure()
 
-        this.attach();
+        
+    }
+
+    configure() {
+        this.element.addEventListener("submit", this.submitHandler)
+    }
+
+    renderContent(): void {
+        
     }
 
 
@@ -261,14 +273,6 @@ class ProjectInput {
 
     }
 
-
-    private configure() {
-        this.element.addEventListener("submit", this.submitHandler)
-    }
-
-    private attach() {
-        this.hotsElement.insertAdjacentElement("afterbegin", this.element)
-    }
 }
 
 const prjInput = new ProjectInput

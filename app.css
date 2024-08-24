@@ -29,8 +29,9 @@ input:focus,textarea:focus {
 }
 button {
   font: inherit;
-  background: #ff0062;
-  border: 1px solid #ff0062;
+  background: #619c51e1;
+  border: 1px solid #267758;
+  border-radius: 20%;
   cursor: pointer;
   color: white;
   padding: 0.75rem 1rem;
@@ -40,25 +41,25 @@ button:focus {
 }
 button:hover,
 button:active {
-  background: #a80041;
-  border-color: #a80041;
+  background: #5aa800;
+  border-color: #2a181f;
 }
 .projects {
   margin: 1rem;
-  border: 1px solid #ff0062;
+  border: 1px solid #221e20;
 }
 .projects header {
-  background: rgb(249, 53, 53);
+  background: rgb(200, 198, 55);
   height: 3.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 #finished-projects {
-  border-color: #0044ff;
+  border-color: #26921e;
 }
 #finished-projects header {
-  background: #0044ff;
+  background: #20a426;
 }
 .projects h2 {
   margin: 0;
@@ -98,6 +99,6 @@ button:active {
 #user-input {
   margin: 1rem;
   padding: 1rem;
-  border: 1px solid #ff0062;
+  border: 1px solid #33282c;
   background: #f7f7f7;
 }
