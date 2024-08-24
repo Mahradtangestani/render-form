@@ -17,9 +17,11 @@ class Project {
     }
 }
 
+type Listener = (items:Project[]) => void
+
 class ProjectState {
 
-    private listeners: any[] = []
+    private listeners: Listener[] = []
 
     private projects: Project[] = []
 
@@ -35,17 +37,17 @@ class ProjectState {
         return this.instance;
     }
 
-    addListener(listenerFn: Function) {
+    addListener(listenerFn: Listener) {
         this.listeners.push(listenerFn)
     }
 
     addProject(title: string, description: string, numOfPeople: number) {
         const newProject = new Project(
-        Math.random.toString(),
-        title,
-        description,
-        numOfPeople,
-        ProjectStatus.Active
+            Math.random.toString(),
+            title,
+            description,
+            numOfPeople,
+            ProjectStatus.Active
         )
         this.projects.push(newProject)
         for (const listenerFn of this.listeners) {
@@ -132,7 +134,15 @@ class ProjectList {
         this.element.id = `${this.type}-projects`;
 
         projectState.addListener((projects: Project[]) => {
-            this.assignedProject = projects
+            const relatedProject = projects.filter(prj => {
+                if (this.type === "active") {
+                    return prj.status === ProjectStatus.Active
+                }
+                return prj.status === ProjectStatus.Finished
+            })
+            
+            this.assignedProject = relatedProject;
+
             this.renderProjects();
         })
 
@@ -142,6 +152,7 @@ class ProjectList {
 
     private renderProjects() {
         const listEl = document.getElementById(`${this.type}-prject-list`)! as HTMLUListElement;
+        listEl.innerHTML = ""
         for (const prjItem of this.assignedProject) {
             const listItem = document.createElement("li");
             listItem.textContent = prjItem.title
