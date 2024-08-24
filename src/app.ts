@@ -1,22 +1,27 @@
+enum ProjectStatus {
+    Active,
+    Finished
+}
+
+
 class Project {
     constructor(
 
-       public id: string,
-       public title: string,
-       public description: string,
-       public people: number,
-
+        public id: string,
+        public title: string,
+        public description: string,
+        public people: number,
+        public status: ProjectStatus
     ) {
 
     }
 }
 
-
 class ProjectState {
 
     private listeners: any[] = []
 
-    private projects: any[] = []
+    private projects: Project[] = []
 
     private static instance: ProjectState
 
@@ -35,12 +40,13 @@ class ProjectState {
     }
 
     addProject(title: string, description: string, numOfPeople: number) {
-        const newProject = {
-            id: Math.random().toString(),
-            title: title,
-            description: description,
-            people: numOfPeople
-        }
+        const newProject = new Project(
+        Math.random.toString(),
+        title,
+        description,
+        numOfPeople,
+        ProjectStatus.Active
+        )
         this.projects.push(newProject)
         for (const listenerFn of this.listeners) {
             listenerFn(this.projects.slice())
@@ -111,7 +117,7 @@ class ProjectList {
 
     element: HTMLFormElement;
 
-    assignedProject: any[]
+    assignedProject: Project[]
 
 
     constructor(private type: "active" | "finished") {
@@ -125,7 +131,7 @@ class ProjectList {
         this.element = importedNode.firstElementChild as HTMLFormElement
         this.element.id = `${this.type}-projects`;
 
-        projectState.addListener((projects: any[]) => {
+        projectState.addListener((projects: Project[]) => {
             this.assignedProject = projects
             this.renderProjects();
         })
