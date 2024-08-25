@@ -21,7 +21,7 @@ type Listener<T> = (items:T[]) => void
 
 
 class State<T>{
-    
+
     protected listeners: Listener<T>[] = []
 
     addListener(listenerFn: Listener<T>) {
@@ -55,7 +55,7 @@ class ProjectState extends State<Project> {
 
     addProject(title: string, description: string, numOfPeople: number) {
         const newProject = new Project(
-            Math.random.toString(),
+            Math.random().toString(),
             title,
             description,
             numOfPeople,
@@ -154,6 +154,29 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement>{
 }
 
 
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement>{
+     
+    private project:Project
+
+    constructor(hostId:string , project:Project){
+        super("single-project" , hostId , false , project.id)
+        this.project = project
+        this.renderContent()
+    }
+
+    configure(): void {
+        
+    }
+
+    renderContent(): void {
+        this.element.querySelector("h2")!.textContent = this.project.title
+        this.element.querySelector("h3")!.textContent = this.project.people.toString()
+        this.element.querySelector("p")!.textContent = this.project.description
+    }
+
+}
+
+
 class ProjectList extends Component<HTMLDivElement , HTMLUListElement> {
     
     assignedProject: Project[]
@@ -184,10 +207,7 @@ class ProjectList extends Component<HTMLDivElement , HTMLUListElement> {
         const listEl = document.getElementById(`${this.type}-prject-list`)! as HTMLUListElement;
         listEl.innerHTML = ""
         for (const prjItem of this.assignedProject) {
-            const listItem = document.createElement("li");
-            listItem.textContent = prjItem.title
-
-            listEl.appendChild(listItem)
+            new ProjectItem(this.element.querySelector("ul")!.id , prjItem)
         }
     }
     configure(): void {
