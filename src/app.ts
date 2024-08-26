@@ -1,6 +1,12 @@
 interface Draggable{
-    dragStartHandler():void
-    dragEndHandler():void
+    dragStartHandler(event:DragEvent):void
+    dragEndHandler(event:DragEvent):void
+}
+
+interface DragTarget{
+    dragOverHandler(event:DragEvent):void
+    dropHandler(event:DragEvent):void
+    dragLeaveHandler(event:DragEvent):void
 }
 
 
