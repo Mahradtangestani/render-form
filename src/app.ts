@@ -1,3 +1,9 @@
+interface Draggable{
+    dragStartHandler():void
+    dragEndHandler():void
+}
+
+
 enum ProjectStatus {
     Active,
     Finished
