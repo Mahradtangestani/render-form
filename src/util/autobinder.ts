@@ -1,4 +1,4 @@
-namespace App{
+
     export function Autobind(
         _: any,
         _2: string,
@@ -14,4 +14,3 @@ namespace App{
         }
         return myDescriptor
     }
-}
