@@ -1,3 +1,10 @@
+/// <reference path="base-component.ts" />
+/// <reference path="../util/autobinder.ts" />
+/// <reference path="../models/project.ts" />
+/// <reference path="../models/drag-drop.ts" />
+
+
+
 namespace App{
     export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Draggable{
          

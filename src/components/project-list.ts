@@ -1,3 +1,10 @@
+/// <reference path="base-component.ts" />
+/// <reference path="../util/autobinder.ts" />
+/// <reference path="../models/project.ts" />
+/// <reference path="../models/drag-drop.ts" />
+/// <reference path="../state/project-state.ts" />
+
+
 namespace App{
     export class ProjectList extends Component<HTMLDivElement , HTMLUListElement> implements DragTarget {
         
