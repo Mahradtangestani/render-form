@@ -78,6 +78,15 @@ class ProjectState extends State<Project> {
             listenerFn(this.projects.slice())
         }
     }
+
+    moveProject(projectId:string , newStatus:ProjectStatus){
+       const project = this.projects.find((prj) => prj.id === projectId)
+
+       if(project){
+        project.status == newStatus;
+       }
+    }
+
 }
 
 const projectState = ProjectState.getInstace()
