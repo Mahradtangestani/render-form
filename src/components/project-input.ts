@@ -1,7 +1,7 @@
-import { Component } from "../components/base-component.js";
-import { projectState } from "../state/project-state.js";
-import { Autobind } from "../util/autobinder.js";
-import { Validatable, validate } from "../util/validation.js"
+import { Component } from "../components/base-component";
+import { projectState } from "../state/project-state";
+import { Autobind } from "../util/autobinder";
+import { Validatable, validate } from "../util/validation"
 
 
 

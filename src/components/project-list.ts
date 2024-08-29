@@ -1,9 +1,9 @@
-import { Component } from "../components/base-component.js"
-import { DragTarget } from "../models/drag-drop.js"
-import { Project, ProjectStatus } from "../models/project.js"
-import { projectState } from "../state/project-state.js"
-import { Autobind } from "../util/autobinder.js"
-import { ProjectItem } from "../components/project-item.js"
+import { Component } from "../components/base-component"
+import { DragTarget } from "../models/drag-drop"
+import { Project, ProjectStatus } from "../models/project"
+import { projectState } from "../state/project-state"
+import { Autobind } from "../util/autobinder"
+import { ProjectItem } from "../components/project-item"
 
 
 
